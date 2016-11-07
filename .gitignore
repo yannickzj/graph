@@ -29,4 +29,11 @@
 *.app
 
 # VS 
+.gitattributes
 *.VC.*
+*.aps
+*.rc
+*.sln
+*.vcxproj
+*.vcxproj.filters
+.vs/

@@ -55,5 +55,6 @@ private:
         edge_event_type type;
 
 public:
+        ~edge(){}
 
 };

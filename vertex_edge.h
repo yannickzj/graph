@@ -6,6 +6,8 @@ enum vertex_type {point_of_interest = 0, intersection = 1};
 enum direction {bi_directional = 0, v1_to_v2 = 1, v2_to_v1 = 2};
 enum edge_event_type{open = 0, close = 1};
 
+
+
 class vertex
 {
 

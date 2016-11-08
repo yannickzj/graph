@@ -8,7 +8,7 @@ enum edge_event_type{open = 0, close = 1};
 
 
 
-class vertex
+class Vertex
 {
 
 private:
@@ -20,16 +20,17 @@ private:
 
         double y;
 public:
-        vertex(string _name = "unnamed" , vertex_type _type = point_of_interest, double _x = 0, double _y = 0):name(_name),type(_type),x(_x),y(_y){}
 
-        ~vertex(){}
+		Vertex(string, vertex_type, double, double);
 
-        vertex(const vertex& p)  // copy constructor
+        ~Vertex() {}
+
+        Vertex(const Vertex& p)  // copy constructor
         {
             *this = p;
         }
 
-        vertex & operator = (const vertex& p)    //operator =
+        Vertex & operator = (const Vertex& p)    //operator =
         {
             if(this == &p) return(*this);
             name = p.name;
@@ -41,12 +42,14 @@ public:
 
 };
 
-class edge
+class Edge
 {
 private:
-        vertex v1;
+		string name;
 
-        vertex v2;
+        Vertex v1;
+
+        Vertex v2;
 
         direction dir;
 
@@ -57,6 +60,22 @@ private:
         edge_event_type type;
 
 public:
-        ~edge(){}
+
+		Edge();
+		
+        ~Edge(){}
 
 };
+
+
+
+Vertex::Vertex(string _name = "unnamed", vertex_type _type = point_of_interest, double _x = 0, double _y = 0) :name(_name), type(_type), x(_x), y(_y) {
+	std::cout << "create a vertex\n";
+}
+
+
+
+
+
+
+

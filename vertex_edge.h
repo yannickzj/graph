@@ -136,21 +136,21 @@ public:
 class Path {
 	
 private:
-		vector<Edge> path;
+	vector<Edge> path;
 
-		double distance;
+	double distance;
 
 public:
 
-		Path() {}
+	Path() {}
 
-		Path(Edge edges[]) {
-				int len = sizeof(edges) / sizeof(Edge);
-				for (int i = 0; i < len; i++) {
-					path.push_back(edges[i]);
-				}
-		}
+	Path(Edge edges[]) {
+			int len = sizeof(edges) / sizeof(Edge);
+			for (int i = 0; i < len; i++) {
+				path.push_back(edges[i]);
+			}
+	}
 
-		~Path() {}
+	~Path() {}
 
 };

@@ -19,7 +19,13 @@ private:
 public:
 		Graph() {}
 
+		Graph(string _name): name(_name), adj_list() {}
+
 		~Graph() {}
+
+		string getName() {
+				return name;
+		}
 
 		void addVertex(vertex_type type, string label) {}
 
@@ -38,5 +44,9 @@ public:
 		void retrieve(string filename) {}
 		
 };
+
+int Graph::numEdge = 0;
+
+int Graph::numVertex = 0;
 
 

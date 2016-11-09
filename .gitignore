@@ -38,4 +38,5 @@
 *.vcxproj.filters
 .vs/
 main/
+main.cpp
 

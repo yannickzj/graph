@@ -1,7 +1,7 @@
 #include <iostream>
-#include "implement.h"
+#include "graph.h"
 
-int main() {
+int main(int argc, char** argv) {
 	Vertex a;
 	std:: cout << "hello\n";
 	return 0;

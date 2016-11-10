@@ -1,13 +1,19 @@
-vertex:
+#vertex: name; vertex_type; x; y
 DC 0 0 0
 58Cardill 0 5 1
 C1 1 4 2
 C2 1 1 0
 C3 1 2 3
 
-edge:
-DC I1 0 20 5 0
-C1 C2 0 15 5 0
-C2 C3 1 10 5 0
-C3 58Cardill 0 18 5 0
-58Cardill C2 1 20 10 0 
+#edge: name; v1_name; v2_name; directional; speed; length; eventType
+E1 DC C1 0 20 5 0
+E2 C1 C2 0 15 5 0
+E3 C2 C3 1 10 5 0
+E4 C3 58Cardill 0 18 5 0
+E5 58Cardill C2 1 20 10 0 
+
+#path: name; edge1_name; edge2_name; ...; edgeN_name
+goHome E1 E2 E3 E4
+goToStudy E5 E2 E1
+
+#end

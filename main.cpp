@@ -11,6 +11,9 @@ int main(int argc, char** argv) {
 	//a->print();
 	//int num = Graph::getNumRoad();
 	//cout << num << endl;
+	//vector<string>* r1 = m1.getRoad("goHome");
+	//r1->push_back("hello");
+	//vector<string>* r1 = m1.getRoad("goHome");
 	m1.store("output.txt");
 
 	return 0;

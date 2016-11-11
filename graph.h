@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include "vertex_edge.h"
+#include "stdlib.h"
 
 #define BUFFERSIZE 256
 #define VERTEX_STR "#vertex"
@@ -24,7 +25,7 @@ private:
 
 	map<string, Edge> edgeMap;
 
-	map<string, vector<string>> roadMap;
+	map<string, vector<string> > roadMap;
 
 	static int numVertex;
 
@@ -167,6 +168,16 @@ public:
 		}
 	}
 
+	vector<string>* getRoad(string name) {
+		if (containsRoad(name)) {
+			return &roadMap.at(name);
+		}
+		else {
+			cout << "The graph does not contain the road \"" << name << "\"!" << endl;
+			exit(1);
+		}
+	}
+
 	void addVertex(string label, vertexType type, double x, double y)
 	{
 		Vertex newVertex(label, type, x, y);
@@ -244,9 +255,19 @@ public:
 		return false;
 	}
 
+	bool containsRoad(string label) {
+		map<string, vector<string> >::iterator it1;
+		it1 = roadMap.find(label);
+		if (it1 != roadMap.end())
+		{
+			return true;
+		}
+		return false;
+	}
+
 	void store(string filename) {
 		ofstream outfile;
-		outfile.open(filename);
+		outfile.open(filename.c_str());
 
 		//store the vertex information
 		outfile << "#vertex: name; vertex_type; x; y" << endl;
@@ -266,7 +287,7 @@ public:
 
 		//store the path information
 		outfile << "#path: name; edge1_name; edge2_name; ...; edgeN_name" << endl;
-		map<string, vector<string>>::iterator iterRoad;
+		map<string, vector<string> >::iterator iterRoad;
 		for (iterRoad = roadMap.begin(); iterRoad != roadMap.end(); iterRoad++) {
 			outfile << iterRoad->first;
 			vector<string> edges = iterRoad->second;
@@ -284,7 +305,7 @@ public:
 
 	void retrieve(string filename) {
 		ifstream infile;
-		infile.open(filename);
+		infile.open(filename.c_str());
 
 		if (!infile.good()) {
 			cout << "cannot open the input file!" << endl;

@@ -16,16 +16,17 @@ private:
 
 	vertexType type;
 
-	double x;
+	int x;
 
-	double y;
+	int y;
+
+	int priority;
+
+	string prev;
 
 public:
 
-
-	//Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST) :name(_name), type(_type) {}
-
-	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, double _x = 0, double _y = 0) :name(_name), type(_type), x(_x), y(_y) {}
+	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, int _x = 0, int _y = 0, int _priority = INT_MAX, string _prev = "") :name(_name), type(_type), x(_x), y(_y), priority(_priority), prev(_prev) {}
 
 	~Vertex() {}
 
@@ -41,7 +42,13 @@ public:
 		type = p.type;
 		x = p.x;
 		y = p.y;
+		priority = p.priority;
+		prev = p.prev;
 		return (*this);
+	}
+
+	bool operator < (Vertex& v2) {     // operator <
+		return this->priority < v2.priority;
 	}
 
 	string getName()
@@ -54,20 +61,32 @@ public:
 		return type;
 	}
 
-	double getX() {
+	int getX() {
 		return x;
 	}
 
-	double getY() {
+	int getY() {
 		return y;
+	}
+
+	int getPriority() {
+		return priority;
+	}
+
+	void setPriority(int _priority) {
+		priority = _priority;
 	}
 
 	void setType(vertexType _type) {
 		type = _type;
 	}
 
+	void setPrev(string _prev) {
+		prev = _prev;
+	}
+
 	void print() {
-		cout << "vertex: name = " << name << ", type = " << type << ", x = " << x << ", y = " << y << endl;
+		cout << "vertex: name = " << name << ", type = " << type << ", x = " << x << ", y = " << y << ", priority = " << priority << endl;
 	}
 
 
@@ -84,12 +103,12 @@ private:
 
 	int speed;
 
-	double length;
+	int length;
 
 	eventType type;
 
 public:
-	Edge(string _v1, string _v2, dirType _dir = BI_DIRECTIONAL, int _speed = 30, double _length = 10, eventType _type = OPEN) :
+	Edge(string _v1, string _v2, dirType _dir = BI_DIRECTIONAL, int _speed = 30, int _length = 10, eventType _type = OPEN) :
 		v1(_v1), v2(_v2), dir(_dir), speed(_speed), length(_length), type(_type) {}
 
 	~Edge() {}
@@ -141,7 +160,7 @@ public:
 		return speed;
 	}
 
-	double getLength(void)
+	int getLength(void)
 	{
 		return length;
 	}
@@ -156,24 +175,3 @@ public:
 	}
 };
 
-
-//class Path {
-//
-//private:
-//	vector<string> path;
-//
-//	double distance;
-//
-//public:
-//
-//	Path() {}
-//
-//	Path(vector<string> edges) {
-//		for (int i = 0; i < edges.size(); i++) {
-//			path.push_back(edges[i]);
-//		}
-//	}
-//
-//	~Path() {}
-//
-//};

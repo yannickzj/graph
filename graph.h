@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <queue>
 #include "vertex_edge.h"
 #include "stdlib.h"
 
@@ -12,6 +13,7 @@
 #define EDGE_STR "#edge"
 #define PATH_STR "#path"
 #define END_STR "#path"
+#define PREV_DEFAULT ""
 
 using namespace std;
 
@@ -19,7 +21,9 @@ class Graph {
 private:
 	string name;
 
-	map<string, vector<string> > adjList;
+	map<string, vector<string> > adjOutList;
+
+	map<string, vector<string> > adjInList;
 
 	map<string, Vertex> vertexMap;
 
@@ -69,8 +73,8 @@ private:
 		vector<string> strSplit = split(str, " ");
 		string name = strSplit[0];
 		int typeInt = atoi(strSplit[1].c_str());
-		double x = atof(strSplit[2].c_str());
-		double y = atof(strSplit[3].c_str());
+		int x = atoi(strSplit[2].c_str());
+		int y = atoi(strSplit[3].c_str());
 
 		vertexType type;
 		if (typeInt == 0 || typeInt == 1) {
@@ -92,7 +96,7 @@ private:
 		string v2 = strSplit[2];
 		int dirInt = atoi(strSplit[3].c_str());
 		int speed = atoi(strSplit[4].c_str());
-		double length = atof(strSplit[5].c_str());
+		int length = atoi(strSplit[5].c_str());
 		int eventTypeInt = atoi(strSplit[6].c_str());
 
 		dirType dir;
@@ -168,6 +172,32 @@ public:
 		}
 	}
 
+	vector<string> getAdjOutVertex(string v) {
+		map<string, vector<string> >::iterator iter = adjOutList.find(v);
+		vector<string> vertices;
+
+		if (iter != adjOutList.end()) {
+			int num = iter->second.size();
+			for (int i = 0; i < num; i++) {
+				vertices.push_back(findV2(v, iter->second[i]));
+			}
+		}
+		return vertices;
+	}
+
+	vector<string> getAdjInVertex(string v) {
+		map<string, vector<string> >::iterator iter = adjInList.find(v);
+		vector<string> vertices;
+
+		if (iter != adjInList.end()) {
+			int num = iter->second.size();
+			for (int i = 0; i < num; i++) {
+				vertices.push_back(findV2(v, iter->second[i]));
+			}
+		}
+		return vertices;
+	}
+
 	vector<string>* getRoad(string name) {
 		if (containsRoad(name)) {
 			return &roadMap.at(name);
@@ -178,16 +208,52 @@ public:
 		}
 	}
 
-	void addVertex(string label, vertexType type, double x, double y)
+	string findV2(string v1, string edge) {
+		Edge* p = getEdge(edge);
+		if (p->getV1() == v1) {
+			return p->getV2();
+		}
+		else if (p->getV2() == v1) {
+			return p->getV1();
+		}
+		else {
+			cout << "the edge " << edge << " does not contain the vertex " << v1 << " !" << endl;
+			exit(1);
+		}
+	}
+
+	int getVertexPriority(string label) {
+		Vertex* p = getVertex(label);
+		return p->getPriority();
+	}
+
+	int getEdgeLength(string label) {
+		Edge* p = getEdge(label);
+		return p->getLength();
+	}
+
+	int getEdgeSpeed(string label) {
+		Edge* p = getEdge(label);
+		return p->getSpeed();
+	}
+
+	eventType getEdgeEvent(string label) {
+		Edge* p = getEdge(label);
+		return p->getType();
+	}
+
+	void addVertex(string label, vertexType type, int x, int y)
 	{
 		Vertex newVertex(label, type, x, y);
 		vertexMap.insert(make_pair(label, newVertex));
-		vector <string> newList;
-		adjList.insert(make_pair(label, newList));
+		vector <string> newList1;
+		vector <string> newList2;
+		adjOutList.insert(make_pair(label, newList1));
+		adjInList.insert(make_pair(label, newList2));
 		numVertex++;
 	}
 
-	void addEdge(string label, string v1, string v2, dirType dir, int speed, double length, eventType type)
+	void addEdge(string label, string v1, string v2, dirType dir, int speed, int length, eventType type)
 	{
 		if (!containsVertex(v1) || !containsVertex(v2)) {
 			cout << "error: edge vertex does not exist!" << endl;
@@ -197,16 +263,29 @@ public:
 		Edge newEdge(v1, v2, dir, speed, length, type);
 		edgeMap.insert(make_pair(label, newEdge));
 
-		if (dir == V1_TO_V2)
-			adjList[v1].push_back(label);
-		if (dir == V2_TO_V1)
-			adjList[v2].push_back(label);
+		if (dir == V1_TO_V2) {
+			adjOutList[v1].push_back(label); 
+			adjInList[v2].push_back(label);
+		}
+			
+		if (dir == V2_TO_V1) {
+			adjOutList[v2].push_back(label);
+			adjInList[v1].push_back(label);
+		}
+			
 		if (dir == BI_DIRECTIONAL)
 		{
-			adjList[v1].push_back(label);
-			adjList[v2].push_back(label);
+			adjOutList[v1].push_back(label);
+			adjOutList[v2].push_back(label);
+			adjInList[v1].push_back(label);
+			adjInList[v2].push_back(label);
 		}
 		numEdge++;
+	}
+
+	void road(string name, vector<string> edges) {
+		roadMap.insert(make_pair(name, edges));
+		numRoad++;
 	}
 
 	void edgeEvent(string label, eventType type)
@@ -215,23 +294,54 @@ public:
 		e->setEventType(type);
 	}
 
-	void road(string name, vector<string> edges) {
-		roadMap.insert(make_pair(name, edges));
-		numRoad++;
+	void setVertexPriority(string label, int priority) {
+		Vertex* p = getVertex(label);
+		p->setPriority(priority);
 	}
 
-	void trip(string fromVertex, string toVertex, string label) {}
+	void setVertexPrev(string label, string prev) {
+		Vertex* p = getVertex(label);
+		p->setPrev(prev);
+	}
 
-	bool vertex(string label)
-	{
-		std::map<string, vector<string> >::iterator it1;
-		it1 = adjList.find(label);
-		if (it1 != adjList.end())
-		{
-			return true;
+	void relax(string u, string edge) {
+		int length = getEdgeLength(edge);
+		int priorityU = getVertexPriority(u);
+		string v = findV2(u, edge);
+		int priorityV = getVertexPriority(v);
+		if (priorityV > priorityU + length) {
+			setVertexPriority(v, priorityU + length);
+			setVertexPrev(v, u);
 		}
-		return false;
 	}
+
+	void trip(string fromVertex, string toVertex, string label) {
+		priority_queue<Vertex> q;
+		
+		//initialize all the vertex priority values
+		map<string, Vertex>::iterator iterVertex;
+		for (iterVertex = vertexMap.begin(); iterVertex != vertexMap.end(); iterVertex++) {
+			setVertexPriority(iterVertex->first, INT_MAX);
+			setVertexPrev(iterVertex->first, PREV_DEFAULT);
+		}
+
+		//update the priority values of fromVertex and its out-neighbors
+		setVertexPriority(fromVertex, 0);
+		map<string, vector<string> >::iterator iterAdj = adjOutList.find(fromVertex);
+		if (iterAdj != adjOutList.end()) {
+			int num = iterAdj->second.size();
+			for (int i = 0; i < num; i++) {
+				string v = findV2(fromVertex, iterAdj->second[i]);
+				string e = iterAdj->second[i];
+				int edgeLen = getEdgeLength(e);
+				setVertexPriority(v, edgeLen);
+				setVertexPrev(v, fromVertex);
+			}
+		}
+
+	}
+
+	bool vertex(string label) {}
 
 	bool containsVertex(string label)
 	{

@@ -29,20 +29,20 @@ public:
 
 	~Vertex() {}
 
-	//Vertex(const Vertex& p)  // copy constructor
-	//{
-	//	*this = p;
-	//}
+	Vertex(const Vertex& p)  // copy constructor
+	{
+		*this = p;
+	}
 
-	//Vertex & operator = (const Vertex& p)    //operator =
-	//{
-	//	if (this == &p) return(*this);
-	//	name = p.name;
-	//	type = p.type;
-	//	x = p.x;
-	//	y = p.y;
-	//	return (*this);
-	//}
+	Vertex & operator = (const Vertex& p)    //operator =
+	{
+		if (this == &p) return(*this);
+		name = p.name;
+		type = p.type;
+		x = p.x;
+		y = p.y;
+		return (*this);
+	}
 
 	string getName()
 	{
@@ -52,6 +52,14 @@ public:
 	vertexType getType()
 	{
 		return type;
+	}
+
+	double getX() {
+		return x;
+	}
+
+	double getY() {
+		return y;
 	}
 
 	void setType(vertexType _type) {
@@ -86,22 +94,22 @@ public:
 
 	~Edge() {}
 
-	//Edge(const Edge& p)  // copy constructor
-	//{
-	//	*this = p;
-	//}
+	Edge(const Edge& p)  // copy constructor
+	{
+		*this = p;
+	}
 
-	//Edge & operator = (const Edge& p)    //operator =
-	//{
-	//	if (this == &p) return(*this);
-	//	v1 = p.v1;
-	//	v2 = p.v2;
-	//	dir = p.dir;
-	//	speed = p.speed;
-	//	length = p.length;
-	//	type = p.type;
-	//	return (*this);
-	//}
+	Edge & operator = (const Edge& p)    //operator =
+	{
+		if (this == &p) return(*this);
+		v1 = p.v1;
+		v2 = p.v2;
+		dir = p.dir;
+		speed = p.speed;
+		length = p.length;
+		type = p.type;
+		return (*this);
+	}
 
 	void setEventType(eventType _type)
 	{
@@ -149,24 +157,23 @@ public:
 };
 
 
-class Path {
-
-private:
-	vector<Edge> path;
-
-	double distance;
-
-public:
-
-	Path() {}
-
-	Path(Edge edges[]) {
-		int len = sizeof(edges) / sizeof(Edge);
-		for (int i = 0; i < len; i++) {
-			path.push_back(edges[i]);
-		}
-	}
-
-	~Path() {}
-
-};
+//class Path {
+//
+//private:
+//	vector<string> path;
+//
+//	double distance;
+//
+//public:
+//
+//	Path() {}
+//
+//	Path(vector<string> edges) {
+//		for (int i = 0; i < edges.size(); i++) {
+//			path.push_back(edges[i]);
+//		}
+//	}
+//
+//	~Path() {}
+//
+//};

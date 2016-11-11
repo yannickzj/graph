@@ -24,9 +24,13 @@ private:
 
 	map<string, Edge> edgeMap;
 
+	map<string, vector<string>> roadMap;
+
 	static int numVertex;
 
 	static int numEdge;
+
+	static int numRoad;
 
 	vector<string> split(string str, string pattern) {
 		
@@ -34,7 +38,7 @@ private:
 		string::size_type end;
 		vector<string> result;
 		str += pattern;
-		int size = str.size();
+		string::size_type size = str.size();
 
 		while (start < size) {
 			end = str.find(pattern, start);
@@ -48,19 +52,19 @@ private:
 		return result;
 	}
 
-	void strPrint(vector<string> strList) {
-		if (strList.size() == 0) {
-			return;
-		}
-		cout << "(";
-		for (int i = 0; i < strList.size() - 1; i++) {
-			cout << strList[i] << ",";
-		}
-		cout << strList[strList.size() - 1] << ")" << endl;
-	}
+	//void strPrint(vector<string> strList) {
+	//	if (strList.size() == 0) {
+	//		return;
+	//	}
+	//	cout << "(";
+	//	for (int i = 0; i < strList.size() - 1; i++) {
+	//		cout << strList[i] << ",";
+	//	}
+	//	cout << strList[strList.size() - 1] << ")" << endl;
+	//}
 
 	void retrieveVertex(string str) {
-		cout << str << endl;
+		//cout << str << endl;
 		vector<string> strSplit = split(str, " ");
 		string name = strSplit[0];
 		int typeInt = atoi(strSplit[1].c_str());
@@ -75,12 +79,12 @@ private:
 			cout << "vertexType does not match in \"" << str << "\"!" << endl;
 		}
 		
-		cout << "name = " << name << "; type = " << type << "; x = " << x << "; y = " << y << endl;
+		//cout << "name = " << name << "; type = " << type << "; x = " << x << "; y = " << y << endl;
 		addVertex(name, type, x, y);
 	}
 
 	void retrieveEdge(string str) {
-		cout << str << endl;
+		//cout << str << endl;
 		vector<string> strSplit = split(str, " ");
 		string name = strSplit[0];
 		string v1 = strSplit[1];
@@ -106,28 +110,31 @@ private:
 			cout << "eventType does not match in \"" << str << "\"!" << endl;
 		}
 
-		cout << "name = " << name << "; v1 = " << v1 << "; v2 = " << v2 << "; dir = " << dir << "; speed = " << speed << "; length = " << length << "; type = " << type << endl;
+		//cout << "name = " << name << "; v1 = " << v1 << "; v2 = " << v2 << "; dir = " << dir << "; speed = " << speed << "; length = " << length << "; type = " << type << endl;
 		addEdge(name, v1, v2, dir, speed, length, type);
 	}
 
 	void retrievePath(string str) {
-		cout << str << endl;
+		//cout << str << endl;
 		vector<string> strSplit = split(str, " ");
 		string name = strSplit[0];
 		vector<string> edges;
-		for (int i = 1; i < strSplit.size(); i++) {
+		int len = strSplit.size();
+		for (int i = 1; i < len; i++) {
 			edges.push_back(strSplit[i]);
 		}
 
-		cout << "name = " << name;
-		for (int i = 0; i < edges.size(); i++) {
-			cout << "; edge" << i << " = " << edges[i];
-		}
+		//cout << "name = " << name;
+		//int num = edges.size();
+		//for (int i = 0; i < num; i++) {
+		//	cout << "; edge" << i << " = " << edges[i];
+		//}
 
-		cout << endl;
+		//cout << endl;
 
-		//road(name, edges);
+		road(name, edges);
 	}
+
 
 public:
 	Graph() {}
@@ -197,9 +204,12 @@ public:
 		e->setEventType(type);
 	}
 
-	Path road(Edge edges[], string name) {}
+	void road(string name, vector<string> edges) {
+		roadMap.insert(make_pair(name, edges));
+		numRoad++;
+	}
 
-	Path trip(Vertex fromVertex, Vertex toVertex) {}
+	void trip(string fromVertex, string toVertex, string label) {}
 
 	bool vertex(string label)
 	{
@@ -234,7 +244,43 @@ public:
 		return false;
 	}
 
-	void store(string filename) {}
+	void store(string filename) {
+		ofstream outfile;
+		outfile.open(filename);
+
+		//store the vertex information
+		outfile << "#vertex: name; vertex_type; x; y" << endl;
+		map<string, Vertex>::iterator iterVertex;
+		for (iterVertex = vertexMap.begin(); iterVertex != vertexMap.end(); iterVertex++) {
+			outfile << iterVertex->first << " " << iterVertex->second.getType() << " " << iterVertex->second.getX() << " " << iterVertex->second.getY() << endl;
+		}
+		outfile << endl;
+
+		//store the edge information
+		outfile << "#edge: name; v1_name; v2_name; directional; speed; length; eventType" << endl;
+		map<string, Edge>::iterator iterEdge;
+		for (iterEdge = edgeMap.begin(); iterEdge != edgeMap.end(); iterEdge++) {
+			outfile << iterEdge->first << " " << iterEdge->second.getV1() << " " << iterEdge->second.getV2() << " " << iterEdge->second.getDirection() << " " << iterEdge->second.getSpeed() << " " << iterEdge->second.getLength() << " " << iterEdge->second.getType() << endl;
+		}
+		outfile << endl;
+
+		//store the path information
+		outfile << "#path: name; edge1_name; edge2_name; ...; edgeN_name" << endl;
+		map<string, vector<string>>::iterator iterRoad;
+		for (iterRoad = roadMap.begin(); iterRoad != roadMap.end(); iterRoad++) {
+			outfile << iterRoad->first;
+			vector<string> edges = iterRoad->second;
+			int num = edges.size();
+			for (int i = 0; i < num; i++) {
+				outfile << " " << edges[i];
+			}
+			outfile << endl;
+		}
+		outfile << endl;
+		outfile << "#end" << endl;
+		outfile.close();
+
+	}
 
 	void retrieve(string filename) {
 		ifstream infile;
@@ -310,8 +356,14 @@ public:
 		return numEdge;
 	}
 
+	static int getNumRoad() {
+		return numRoad;
+	}
+
 };
 
 int Graph::numEdge = 0;
 
 int Graph::numVertex = 0;
+
+int Graph::numRoad = 0;

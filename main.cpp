@@ -4,22 +4,13 @@
 
 using namespace std;
 
-//void strPrint(vector<string> strList) {
-//	if (strList.size() == 0) {
-//		return;
-//	}
-//	cout << "(";
-//	for (int i = 0; i < strList.size() - 1; i++) {
-//		cout << strList[i] << ",";
-//	}
-//	cout << strList[strList.size() - 1] << ")" << endl;
-//}
 
 int main(int argc, char** argv) {
 
 	Graph m1;
-	m1.retrieve("test1.txt");
-	m1.trip("58Cardill", "DC", "shortest_path");
+	m1.retrieve("test3.txt");
+
+	//m1.trip("50/BearingerRd1231232", "AlbertSt/8", "shortest_path");
 	//Vertex* a = m1.getVertex("C1");
 	//a->print();
 	//a = m1.getVertex("DC");
@@ -42,7 +33,6 @@ int main(int argc, char** argv) {
 	//strPrint(*r2);
 	//strPrint(*r1);
 	m1.store("output.txt");
-	//cout << INT_MAX << endl;
 
 	return 0;
 }

@@ -330,6 +330,7 @@ public:
 	}
 
 	bool trip(string fromVertex, string toVertex, string label) {
+		// declaration
 		priority_queue<Node> queue;
 		vector<string> source;
 		Node n;
@@ -341,6 +342,7 @@ public:
 			setVertexPrev(iterVertex->first, PREV_DEFAULT);
 		}
 
+		//dijkstra algorithm
 		setVertexPriority(fromVertex, 0);
 		n.p = getVertex(fromVertex);
 		queue.push(n);
@@ -367,9 +369,9 @@ public:
 			}
 		}
 
+		// trace the path from fromVertex to toVertex
 		vector<string> edges;
 		vector<string>::iterator iterEdge;
-		// add edges to the edge list
 		Vertex* trace = getVertex(toVertex);
 		while (trace->getPrev() != PREV_DEFAULT) {
 			string prev = trace->getPrev();

@@ -17,6 +17,16 @@
 
 using namespace std;
 
+struct Node
+{
+	Vertex* p;
+	bool operator < (const Node& n) const {
+		return this->p->getPriority() > n.p->getPriority();
+	}
+};
+
+
+
 class Graph {
 private:
 	string name;
@@ -222,6 +232,21 @@ public:
 		}
 	}
 
+	string findEdgeByVertex(string v1, string v2) {
+		map<string, vector<string> >::iterator iter = adjOutList.find(v1);
+		string edge;
+		if (iter != adjOutList.end()) {
+			int num = iter->second.size();
+			for (int i = 0; i < num; i++) {
+				string e = iter->second[i];
+				if (findV2(v1, e) == v2) {
+					edge = e;
+				}
+			}
+		}
+		return edge;
+	}
+
 	int getVertexPriority(string label) {
 		Vertex* p = getVertex(label);
 		return p->getPriority();
@@ -304,19 +329,10 @@ public:
 		p->setPrev(prev);
 	}
 
-	void relax(string u, string edge) {
-		int length = getEdgeLength(edge);
-		int priorityU = getVertexPriority(u);
-		string v = findV2(u, edge);
-		int priorityV = getVertexPriority(v);
-		if (priorityV > priorityU + length) {
-			setVertexPriority(v, priorityU + length);
-			setVertexPrev(v, u);
-		}
-	}
-
-	void trip(string fromVertex, string toVertex, string label) {
-		priority_queue<Vertex> q;
+	bool trip(string fromVertex, string toVertex, string label) {
+		priority_queue<Node> queue;
+		vector<string> source;
+		Node n;
 		
 		//initialize all the vertex priority values
 		map<string, Vertex>::iterator iterVertex;
@@ -325,20 +341,52 @@ public:
 			setVertexPrev(iterVertex->first, PREV_DEFAULT);
 		}
 
-		//update the priority values of fromVertex and its out-neighbors
 		setVertexPriority(fromVertex, 0);
-		map<string, vector<string> >::iterator iterAdj = adjOutList.find(fromVertex);
-		if (iterAdj != adjOutList.end()) {
-			int num = iterAdj->second.size();
+		n.p = getVertex(fromVertex);
+		queue.push(n);
+
+		while (!queue.empty()) {
+			string u = queue.top().p->getName();
+			source.push_back(u);
+			queue.pop();
+			map<string, vector<string> >::iterator iter = adjOutList.find(u);
+			vector<string> list = iter->second;
+			int num = list.size();
+			int priorityU = getVertexPriority(u);
+
 			for (int i = 0; i < num; i++) {
-				string v = findV2(fromVertex, iterAdj->second[i]);
-				string e = iterAdj->second[i];
-				int edgeLen = getEdgeLength(e);
-				setVertexPriority(v, edgeLen);
-				setVertexPrev(v, fromVertex);
+				int length = getEdgeLength(list[i]);
+				string v = findV2(u, list[i]);
+				int priorityV = getVertexPriority(v);
+				if (priorityV > priorityU + length) {
+					setVertexPriority(v, priorityU + length);
+					setVertexPrev(v, u);
+					n.p = getVertex(v);
+					queue.push(n);
+				}
 			}
 		}
 
+		vector<string> edges;
+		vector<string>::iterator iterEdge;
+		// add edges to the edge list
+		Vertex* trace = getVertex(toVertex);
+		while (trace->getPrev() != PREV_DEFAULT) {
+			string prev = trace->getPrev();
+			string cur = trace->getName();
+			string edge = findEdgeByVertex(prev, cur);
+
+			iterEdge = edges.begin();
+			edges.insert(iterEdge, edge);
+			trace = getVertex(prev);
+		}
+		
+		if (trace->getName() == fromVertex) {
+			road(label, edges);
+			return true;
+		}
+
+		return false;
 	}
 
 	bool vertex(string label) {}

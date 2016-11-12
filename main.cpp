@@ -1,34 +1,35 @@
 #include <iostream>
 #include "graph.h"
+#include <queue>
 
 using namespace std;
 
-void strPrint(vector<string> strList) {
-	if (strList.size() == 0) {
-		return;
-	}
-	cout << "(";
-	for (int i = 0; i < strList.size() - 1; i++) {
-		cout << strList[i] << ",";
-	}
-	cout << strList[strList.size() - 1] << ")" << endl;
-}
+//void strPrint(vector<string> strList) {
+//	if (strList.size() == 0) {
+//		return;
+//	}
+//	cout << "(";
+//	for (int i = 0; i < strList.size() - 1; i++) {
+//		cout << strList[i] << ",";
+//	}
+//	cout << strList[strList.size() - 1] << ")" << endl;
+//}
 
 int main(int argc, char** argv) {
 
 	Graph m1;
 	m1.retrieve("test1.txt");
-	m1.trip("C1", "C2", "shortest_path");
-	Vertex* a = m1.getVertex("C1");
-	a->print();
-	a = m1.getVertex("DC");
-	a->print();
-	a = m1.getVertex("C2");
-	a->print();
-	a = m1.getVertex("C3");
-	a->print();
-	a = m1.getVertex("58Cardill");
-	a->print();
+	m1.trip("58Cardill", "DC", "shortest_path");
+	//Vertex* a = m1.getVertex("C1");
+	//a->print();
+	//a = m1.getVertex("DC");
+	//a->print();
+	//a = m1.getVertex("C2");
+	//a->print();
+	//a = m1.getVertex("C3");
+	//a->print();
+	//a = m1.getVertex("58Cardill");
+	//a->print();
 	//Vertex* b = m1.getVertex("C2");
 	//b->setPriority(150);
 	//b->print();
@@ -40,7 +41,7 @@ int main(int argc, char** argv) {
 	//vector<string>* r2 = m1.getRoad("goHome");
 	//strPrint(*r2);
 	//strPrint(*r1);
-	//m1.store("output.txt");
+	m1.store("output.txt");
 	//cout << INT_MAX << endl;
 
 	return 0;

@@ -1,0 +1,59 @@
+#vertex: name; vertex_type; x; y
+50/BearingerRd 1 0 5
+50/ColumbiaSt 1 0 0
+UoWER 0 1 2
+DJRT 0 4 3
+UoW 0 4 -1
+Glenforrest/BearingerRd 1 5 4
+BearingerRd/AlbertSt 1 8 4
+AMCC 0 8 5
+WLU 0 9 -3
+CB 0 10 -2
+ColumbiaSt/PhillipSt 1 6 0
+ColumbiaSt/AlbertSt 1 8 0
+ColumbiaSt/15 1 11 0
+ColumbiaSt/8 1 12 0
+57/PhillipSt 1 6 -2
+57/AlbertSt 1 8 -2
+57/15 1 10 -2
+57/8 1 12 -2
+AlbertSt/8 1 11 6
+8/15 1 12 2
+
+#edge: name; v1_name; v2_name; directional; speed; length; eventType
+E1 50/BearingerRd Glenforrest/BearingerRd 0 20 4 0
+E2 50/BearingerRd UoWER 0 20 3 0
+E3 50/BearingerRd 50/ColumbiaSt 1 20 5 0
+E4 UoWER 50/ColumbiaSt 0 20 2 0
+E5 50/BearingerRd DJRT 0 20 4 0
+E6 DJRT Glenforrest/BearingerRd 0 20 2 0
+E7 DJRT 50/ColumbiaSt 0 20 7 0
+E8 DJRT ColumbiaSt/PhillipSt 0 20 5 0
+E9 Glenforrest/BearingerRd AMCC 0 20 6 0
+E10 Glenforrest/BearingerRd ColumbiaSt/AlbertSt 0 20 9 0
+E11 ColumbiaSt/PhillipSt 50/ColumbiaSt 0 20 6 0
+E12 ColumbiaSt/PhillipSt ColumbiaSt/AlbertSt 0 20 2 0
+E13 ColumbiaSt/AlbertSt UoW 0 20 2 0
+E14 UoW 50/ColumbiaSt 0 20 4 0
+E15 UoW DJRT 0 20 3 0
+E16 ColumbiaSt/PhillipSt 57/PhillipSt 0 20 2 0
+E17 57/PhillipSt 57/AlbertSt 0 20 2 0
+E18 UoW 57/PhillipSt 0 20 1 0
+E19 57/AlbertSt ColumbiaSt/AlbertSt 0 20 2 0
+E20 ColumbiaSt/AlbertSt AMCC 0 20 7 0
+E21 ColumbiaSt/8 ColumbiaSt/AlbertSt 0 20 3 0
+E22 ColumbiaSt/8 8/15 0 20 2 0
+E23 ColumbiaSt/8 AlbertSt/8 0 20 7 0
+E24 WLU 57/AlbertSt 0 20 2 0
+E25 WLU CB 0 20 1 0
+E26 CB ColumbiaSt/15 0 20 2 0
+E27 CB 57/8 0 20 1 0
+E28 57/8 8/15 0 20 2 0
+E29 8/15 ColumbiaSt/8 0 20 1 0
+E30 AMCC AlbertSt/8 0 20 1 0
+
+#path: name; edge1_name; edge2_name; ...; edgeN_name
+goHome E1 E2 E3 E4
+goToStudy E5 E2 E1
+
+#end

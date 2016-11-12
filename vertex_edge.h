@@ -73,6 +73,10 @@ public:
 		return priority;
 	}
 
+	string getPrev() {
+		return prev;
+	}
+
 	void setPriority(int _priority) {
 		priority = _priority;
 	}

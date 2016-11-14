@@ -14,21 +14,19 @@
 #define PATH_STR "#path"
 #define END_STR "#path"
 #define PREV_DEFAULT ""
+#define HOUR_TO_SECOND 3600
 
 using namespace std;
+enum tripType { SHORTEST = 0, FASTEST = 1 };
 
 struct Node
 {
-	//Vertex* p;
-	int priority;
+	long priority;
 	string label;
 	bool operator < (const Node& n) const {
-		//return this->p->getPriority() > n.p->getPriority();
 		return this->priority > n.priority;
 	}
 };
-
-
 
 class Graph {
 private:
@@ -317,33 +315,30 @@ public:
 		e->setEventType(type);
 	}
 
-	bool trip(string fromVertex, string toVertex, string label) {
+	bool trip(string fromVertex, string toVertex, string label, tripType type = SHORTEST) {
 		// declaration
 		priority_queue<Node> queue;
-		map<string, int> priorityMap;
+		map<string, long> priorityMap;
 		map<string, string> prevMap;
 		vector<string> source;
 		Node n;
 		map<string, Vertex>::iterator iterVertex;
-		map<string, int>::iterator iterPriority;
+		map<string, long>::iterator iterPriority;
 		map<string, string>::iterator iterPrev;
 		
 		//initialize all the vertex priority values
-		
 		for (iterVertex = vertexMap.begin(); iterVertex != vertexMap.end(); iterVertex++) {
-			priorityMap.insert(make_pair(iterVertex->first, INT_MAX));
+			priorityMap.insert(make_pair(iterVertex->first, LONG_MAX));
 			prevMap.insert(make_pair(iterVertex->first, PREV_DEFAULT));
 		}
 
 		//dijkstra algorithm
-		//setVertexPriority(fromVertex, 0);
 		iterPriority = priorityMap.find(fromVertex);
 		iterPriority->second = 0;
 		n.priority = 0;
 		n.label =fromVertex;
 		queue.push(n);
 
-		
 		while (!queue.empty()) {
 			Node node = queue.top();
 			string u = node.label;
@@ -352,15 +347,28 @@ public:
 			map<string, vector<string> >::iterator iter = adjOutList.find(u);
 			vector<string> list = iter->second;
 			int num = list.size();
-			int priorityU = node.priority;
+			long priorityU = node.priority;
 
 			for (int i = 0; i < num; i++) {
 				int length = getEdgeLength(list[i]);
+				int speed = getEdgeSpeed(list[i]);
+				long priorityDif;
+				if (type == SHORTEST) {
+					priorityDif = length;
+				}
+				else if (type == FASTEST) {
+					priorityDif = length * HOUR_TO_SECOND / speed;
+				}
+				else {
+					cout << "tripType not defined!" << endl;
+					exit(1);
+				}
+
 				string v = findV2(u, list[i]);
 				iterPriority = priorityMap.find(v);
-				int priorityV = iterPriority->second;
-				if (priorityV > priorityU + length) {
-					iterPriority->second = priorityU + length;
+				long priorityV = iterPriority->second;
+				if (priorityV > priorityU + priorityDif && getEdge(list[i])->getType() != CLOSE) {
+					iterPriority->second = priorityU + priorityDif;
 					iterPrev = prevMap.find(v);
 					iterPrev->second = u;
 					n.priority = iterPriority->second;
@@ -391,10 +399,30 @@ public:
 		}
 		
 		if (trace == fromVertex) {
-			road(label, edges);
+			string suffix;
+			if (type == SHORTEST) {
+				cout << "shortest trip from " << fromVertex << " to " << toVertex << " is found!" << endl;
+				suffix = "_shortest";
+			}
+			else if (type == FASTEST) {
+				cout << "fastest trip from " << fromVertex << " to " << toVertex << " is found!" << endl;
+				suffix = "_fastest";
+			}
+			road(label + suffix, edges);
 			return true;
 		}
-		cout << "cannot find the shortest trip!" << endl;
+
+		if (type == SHORTEST) {
+			cout << "cannot find the shortest trip!" << endl;
+		}
+		else if (type == FASTEST) {
+			cout << "cannot find the fastest trip!" << endl;
+		}
+		else {
+			cout << "tripType not defined!" << endl;
+			exit(1);
+		}
+
 		return false;
 	}
 

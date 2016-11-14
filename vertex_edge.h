@@ -20,10 +20,6 @@ private:
 
 	int y;
 
-	//int priority;
-
-	//string prev;
-
 public:
 
 	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, int _x = 0, int _y = 0, int _priority = INT_MAX, string _prev = "") :name(_name), type(_type), x(_x), y(_y) {}

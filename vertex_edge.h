@@ -20,13 +20,13 @@ private:
 
 	int y;
 
-	int priority;
+	//int priority;
 
-	string prev;
+	//string prev;
 
 public:
 
-	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, int _x = 0, int _y = 0, int _priority = INT_MAX, string _prev = "") :name(_name), type(_type), x(_x), y(_y), priority(_priority), prev(_prev) {}
+	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, int _x = 0, int _y = 0, int _priority = INT_MAX, string _prev = "") :name(_name), type(_type), x(_x), y(_y) {}
 
 	~Vertex() {}
 
@@ -42,14 +42,9 @@ public:
 		type = p.type;
 		x = p.x;
 		y = p.y;
-		priority = p.priority;
-		prev = p.prev;
 		return (*this);
 	}
 
-	bool operator < (Vertex& v2) {     // operator <
-		return this->priority < v2.priority;
-	}
 
 	string getName()
 	{
@@ -69,28 +64,12 @@ public:
 		return y;
 	}
 
-	int getPriority() {
-		return priority;
-	}
-
-	string getPrev() {
-		return prev;
-	}
-
-	void setPriority(int _priority) {
-		priority = _priority;
-	}
-
 	void setType(vertexType _type) {
 		type = _type;
 	}
 
-	void setPrev(string _prev) {
-		prev = _prev;
-	}
-
 	void print() {
-		cout << "vertex: name = " << name << ", type = " << type << ", x = " << x << ", y = " << y << ", priority = " << priority << endl;
+		cout << "vertex: name = " << name << ", type = " << type << ", x = " << x << ", y = " << y << endl;
 	}
 
 

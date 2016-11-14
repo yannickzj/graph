@@ -19,9 +19,12 @@ using namespace std;
 
 struct Node
 {
-	Vertex* p;
+	//Vertex* p;
+	int priority;
+	string label;
 	bool operator < (const Node& n) const {
-		return this->p->getPriority() > n.p->getPriority();
+		//return this->p->getPriority() > n.p->getPriority();
+		return this->priority > n.priority;
 	}
 };
 
@@ -247,11 +250,6 @@ public:
 		return edge;
 	}
 
-	int getVertexPriority(string label) {
-		Vertex* p = getVertex(label);
-		return p->getPriority();
-	}
-
 	int getEdgeLength(string label) {
 		Edge* p = getEdge(label);
 		return p->getLength();
@@ -319,75 +317,84 @@ public:
 		e->setEventType(type);
 	}
 
-	void setVertexPriority(string label, int priority) {
-		Vertex* p = getVertex(label);
-		p->setPriority(priority);
-	}
-
-	void setVertexPrev(string label, string prev) {
-		Vertex* p = getVertex(label);
-		p->setPrev(prev);
-	}
-
 	bool trip(string fromVertex, string toVertex, string label) {
 		// declaration
 		priority_queue<Node> queue;
+		map<string, int> priorityMap;
+		map<string, string> prevMap;
 		vector<string> source;
 		Node n;
+		map<string, Vertex>::iterator iterVertex;
+		map<string, int>::iterator iterPriority;
+		map<string, string>::iterator iterPrev;
 		
 		//initialize all the vertex priority values
-		map<string, Vertex>::iterator iterVertex;
+		
 		for (iterVertex = vertexMap.begin(); iterVertex != vertexMap.end(); iterVertex++) {
-			setVertexPriority(iterVertex->first, INT_MAX);
-			setVertexPrev(iterVertex->first, PREV_DEFAULT);
+			priorityMap.insert(make_pair(iterVertex->first, INT_MAX));
+			prevMap.insert(make_pair(iterVertex->first, PREV_DEFAULT));
 		}
 
 		//dijkstra algorithm
-		setVertexPriority(fromVertex, 0);
-		n.p = getVertex(fromVertex);
+		//setVertexPriority(fromVertex, 0);
+		iterPriority = priorityMap.find(fromVertex);
+		iterPriority->second = 0;
+		n.priority = 0;
+		n.label =fromVertex;
 		queue.push(n);
 
+		
 		while (!queue.empty()) {
-			string u = queue.top().p->getName();
+			Node node = queue.top();
+			string u = node.label;
 			source.push_back(u);
-			queue.pop();
+			
 			map<string, vector<string> >::iterator iter = adjOutList.find(u);
 			vector<string> list = iter->second;
 			int num = list.size();
-			int priorityU = getVertexPriority(u);
+			int priorityU = node.priority;
 
 			for (int i = 0; i < num; i++) {
 				int length = getEdgeLength(list[i]);
 				string v = findV2(u, list[i]);
-				int priorityV = getVertexPriority(v);
+				iterPriority = priorityMap.find(v);
+				int priorityV = iterPriority->second;
 				if (priorityV > priorityU + length) {
-					setVertexPriority(v, priorityU + length);
-					setVertexPrev(v, u);
-					n.p = getVertex(v);
+					iterPriority->second = priorityU + length;
+					iterPrev = prevMap.find(v);
+					iterPrev->second = u;
+					n.priority = iterPriority->second;
+					n.label = v;
 					queue.push(n);
 				}
 			}
+
+			queue.pop();
 		}
 
 		// trace the path from fromVertex to toVertex
 		vector<string> edges;
 		vector<string>::iterator iterEdge;
-		Vertex* trace = getVertex(toVertex);
-		while (trace->getPrev() != PREV_DEFAULT) {
-			string prev = trace->getPrev();
-			string cur = trace->getName();
-			string edge = findEdgeByVertex(prev, cur);
+		string trace = toVertex;
+		iterPrev = prevMap.find(trace);
+		string prev = iterPrev->second;
+		while (prev != PREV_DEFAULT) {
+			iterPrev = prevMap.find(trace);
+			string edge = findEdgeByVertex(prev, trace);
 
 			iterEdge = edges.begin();
 			edges.insert(iterEdge, edge);
-			trace = getVertex(prev);
+
+			trace = prev;
+			iterPrev = prevMap.find(trace);
+			prev = iterPrev->second;
 		}
 		
-		if (trace->getName() == fromVertex) {
+		if (trace == fromVertex) {
 			road(label, edges);
 			return true;
 		}
-
+		cout << "cannot find the shortest trip!" << endl;
 		return false;
 	}
 

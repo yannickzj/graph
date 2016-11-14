@@ -6,7 +6,7 @@ using namespace std;
 
 enum vertexType { POINT_OF_INTEREST = 0, INTERSECTION = 1 };
 enum dirType { BI_DIRECTIONAL = 0, V1_TO_V2 = 1, V2_TO_V1 = 2 };
-enum eventType { OPEN = 0, CLOSE = 1 };
+enum eventType { OPEN = 0, CLOSE = 1, HAZARD = 2 };
 
 class Vertex
 {
@@ -22,7 +22,7 @@ private:
 
 public:
 
-	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, int _x = 0, int _y = 0, int _priority = INT_MAX, string _prev = "") :name(_name), type(_type), x(_x), y(_y) {}
+	Vertex(string _name = "unnamed", vertexType _type = POINT_OF_INTEREST, int _x = 0, int _y = 0) :name(_name), type(_type), x(_x), y(_y) {}
 
 	~Vertex() {}
 

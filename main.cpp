@@ -10,7 +10,8 @@ int main(int argc, char** argv) {
 	Graph m1;
 	m1.retrieve("test3.txt");
 
-	m1.trip("50/BearingerRd", "AlbertSt/8", "path1");
+	m1.trip("50/BearingerRd", "AlbertSt/8", "path1", SHORTEST);
+	m1.trip("50/BearingerRd", "AlbertSt/8", "path1", FASTEST);
 	//Vertex* a = m1.getVertex("C1");
 	//a->print();
 	//a = m1.getVertex("DC");

@@ -190,7 +190,7 @@ public:
 		if (iter != adjOutList.end()) {
 			int num = iter->second.size();
 			for (int i = 0; i < num; i++) {
-				vertices.push_back(findV2(v, iter->second[i]));
+				vertices.push_back(getV2(v, iter->second[i]));
 			}
 		}
 		return vertices;
@@ -203,7 +203,7 @@ public:
 		if (iter != adjInList.end()) {
 			int num = iter->second.size();
 			for (int i = 0; i < num; i++) {
-				vertices.push_back(findV2(v, iter->second[i]));
+				vertices.push_back(getV2(v, iter->second[i]));
 			}
 		}
 		return vertices;
@@ -219,7 +219,7 @@ public:
 		}
 	}
 
-	string findV2(string v1, string edge) {
+	string getV2(string v1, string edge) {
 		Edge* p = getEdge(edge);
 		if (p->getV1() == v1) {
 			return p->getV2();
@@ -233,19 +233,21 @@ public:
 		}
 	}
 
-	string findEdgeByVertex(string v1, string v2) {
+	string getEdgeByVertex(string v1, string v2) {
 		map<string, vector<string> >::iterator iter = adjOutList.find(v1);
 		string edge;
 		if (iter != adjOutList.end()) {
 			int num = iter->second.size();
 			for (int i = 0; i < num; i++) {
 				string e = iter->second[i];
-				if (findV2(v1, e) == v2) {
+				if (getV2(v1, e) == v2) {
 					edge = e;
+					return edge;
 				}
 			}
 		}
-		return edge;
+		cout << "cannot find the edge connecting " << v1 << " and " << v2 << endl;
+		exit(1);
 	}
 
 	int getEdgeLength(string label) {
@@ -364,10 +366,10 @@ public:
 					exit(1);
 				}
 
-				string v = findV2(u, list[i]);
+				string v = getV2(u, list[i]);
 				iterPriority = priorityMap.find(v);
 				long priorityV = iterPriority->second;
-				if (priorityV > priorityU + priorityDif && getEdge(list[i])->getType() != CLOSE) {
+				if (priorityV > priorityU + priorityDif && getEdgeEvent(list[i]) != CLOSE) {
 					iterPriority->second = priorityU + priorityDif;
 					iterPrev = prevMap.find(v);
 					iterPrev->second = u;
@@ -388,7 +390,7 @@ public:
 		string prev = iterPrev->second;
 		while (prev != PREV_DEFAULT) {
 			iterPrev = prevMap.find(trace);
-			string edge = findEdgeByVertex(prev, trace);
+			string edge = getEdgeByVertex(prev, trace);
 
 			iterEdge = edges.begin();
 			edges.insert(iterEdge, edge);

@@ -163,7 +163,7 @@ public:
 			return name;
 	}
 
-	Vertex* getVertex(string name) {
+	Vertex* vertex(string name) {
 		if (containsVertex(name)) {
 			return &vertexMap.at(name);
 		}
@@ -427,8 +427,6 @@ public:
 
 		return false;
 	}
-
-	bool vertex(string label) {}
 
 	bool containsVertex(string label)
 	{

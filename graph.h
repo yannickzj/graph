@@ -147,7 +147,7 @@ public:
 		}
 		else {
 			cout << "The graph does not contain the vertex \"" << name << "\"!" << endl;
-			exit(1);
+			return NULL;
 		}
 	}
 
@@ -157,7 +157,7 @@ public:
 		}
 		else {
 			cout << "The graph does not contain the edge \"" << name << "\"!" << endl;
-			exit(1);
+			return NULL;
 		}
 	}
 
@@ -199,6 +199,10 @@ public:
 
 	string getV2(string v1, string edge) {//get the other vertex of the edge
 		Edge* p = getEdge(edge);
+		if (p == NULL) {
+			cout << "the graph does not contain the edge \"" << edge << "\"!" << endl;
+			exit(1);
+		}
 		if (p->getV1() == v1) {
 			return p->getV2();
 		}
@@ -230,16 +234,28 @@ public:
 
 	int getEdgeLength(string label) {
 		Edge* p = getEdge(label);
+		if (p == NULL) {
+			cout << "the graph does not contain the edge \"" << label << "\"!" << endl;
+			exit(1);
+		}
 		return p->getLength();
 	}
 
 	int getEdgeSpeed(string label) {
 		Edge* p = getEdge(label);
+		if (p == NULL) {
+			cout << "the graph does not contain the edge \"" << label << "\"!" << endl;
+			exit(1);
+		}
 		return p->getSpeed();
 	}
 
 	eventType getEdgeEvent(string label) {
 		Edge* p = getEdge(label);
+		if (p == NULL) {
+			cout << "the graph does not contain the edge \"" << label << "\"!" << endl;
+			exit(1);
+		}
 		return p->getType();
 	}
 
@@ -292,6 +308,10 @@ public:
 	void edgeEvent(string label, eventType type)
 	{
 		Edge* e = getEdge(label);
+		if (e == NULL) {
+			cout << "the graph does not contain the edge \"" << label << "\"!" << endl;
+			exit(1);
+		}
 		e->setEventType(type);
 	}
 

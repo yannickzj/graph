@@ -68,17 +68,6 @@ private:
 		return result;
 	}
 
-	//void strPrint(vector<string> strList) {
-	//	if (strList.size() == 0) {
-	//		return;
-	//	}
-	//	cout << "(";
-	//	for (int i = 0; i < strList.size() - 1; i++) {
-	//		cout << strList[i] << ",";
-	//	}
-	//	cout << strList[strList.size() - 1] << ")" << endl;
-	//}
-
 	void retrieveVertex(string str) {
 		//cout << str << endl;
 		vector<string> strSplit = split(str, " ");

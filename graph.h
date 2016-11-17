@@ -84,7 +84,6 @@ private:
 			cout << "vertexType does not match in \"" << str << "\"!" << endl;
 		}
 
-		//cout << "name = " << name << "; type = " << type << "; x = " << x << "; y = " << y << endl;
 		addVertex(name, type, x, y);
 	}
 
@@ -115,7 +114,6 @@ private:
 			cout << "eventType does not match in \"" << str << "\"!" << endl;
 		}
 
-		//cout << "name = " << name << "; v1 = " << v1 << "; v2 = " << v2 << "; dir = " << dir << "; speed = " << speed << "; length = " << length << "; type = " << type << endl;
 		addEdge(name, v1, v2, dir, speed, length, type);
 	}
 
@@ -128,15 +126,6 @@ private:
 		for (int i = 1; i < len; i++) {
 			edges.push_back(strSplit[i]);
 		}
-
-		//cout << "name = " << name;
-		//int num = edges.size();
-		//for (int i = 0; i < num; i++) {
-		//	cout << "; edge" << i << " = " << edges[i];
-		//}
-
-		//cout << endl;
-
 		road(name, edges);
 	}
 

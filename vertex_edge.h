@@ -14,9 +14,9 @@
 
 using namespace std;
 
-enum vertexType { POINT_OF_INTEREST = 0, INTERSECTION = 1 };
-enum dirType { BI_DIRECTIONAL = 0, V1_TO_V2 = 1, V2_TO_V1 = 2 };
-enum eventType { OPEN = 0, CLOSE = 1, HAZARD = 2 };
+enum vertexType { POINT_OF_INTEREST = 0, INTERSECTION = 1 };    //vertex type
+enum dirType { BI_DIRECTIONAL = 0, V1_TO_V2 = 1, V2_TO_V1 = 2 }; //direction
+enum eventType { OPEN = 0, CLOSE = 1, HAZARD = 2 };  //edge event type
 
 class Vertex
 {
@@ -32,9 +32,9 @@ private:
 
 public:
 
-	Vertex(string _name = DEFAULT_VERTEX_NAME, vertexType _type = DEFAULT_VERTEX_TYPE, int _x = DEFAULT_X, int _y = DEFAULT_Y) :name(_name), type(_type), x(_x), y(_y) {}
+	Vertex(string _name = DEFAULT_VERTEX_NAME, vertexType _type = DEFAULT_VERTEX_TYPE, int _x = DEFAULT_X, int _y = DEFAULT_Y) :name(_name), type(_type), x(_x), y(_y) {} //constructor
 
-	~Vertex() {}
+	~Vertex() {}    //destructor
 
 	Vertex(const Vertex& p)  // copy constructor
 	{
@@ -98,9 +98,9 @@ private:
 
 public:
 	Edge(string _v1, string _v2, dirType _dir = DEFAULT_DIRECTION, int _speed = DEFAULT_SPEED, int _length = DEFAULT_LENGTH, eventType _type = DEFAULT_EDGE_TYPE) :
-		v1(_v1), v2(_v2), dir(_dir), speed(_speed), length(_length), type(_type) {}
+		v1(_v1), v2(_v2), dir(_dir), speed(_speed), length(_length), type(_type) {} //constructor
 
-	~Edge() {}
+	~Edge() {}  //destructor
 
 	Edge(const Edge& p)  // copy constructor
 	{

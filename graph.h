@@ -19,7 +19,7 @@
 using namespace std;
 enum tripType { SHORTEST = 0, FASTEST = 1 };
 
-struct Node
+struct Node // use in priority queue.
 {
 	long priority;
 	string label;
@@ -48,8 +48,8 @@ private:
 
 	static int numRoad;
 
-	vector<string> split(string str, string pattern) {
-		
+	vector<string> split(string str, string pattern) {  //  split function
+
 		string::size_type start = 0;
 		string::size_type end;
 		vector<string> result;
@@ -94,7 +94,7 @@ private:
 		else {
 			cout << "vertexType does not match in \"" << str << "\"!" << endl;
 		}
-		
+
 		//cout << "name = " << name << "; type = " << type << "; x = " << x << "; y = " << y << endl;
 		addVertex(name, type, x, y);
 	}
@@ -153,17 +153,17 @@ private:
 
 
 public:
-	Graph() {}
+	Graph() {}  //constructor
 
-	Graph(string _name) : name(_name) {}
+	Graph(string _name) : name(_name) {}    //constructor
 
-	~Graph() {}
+	~Graph() {} //destructor
 
 	string getName() {
 			return name;
 	}
 
-	Vertex* vertex(string name) {
+	Vertex* vertex(string name) {   //check the vertex whether is in map or not
 		if (containsVertex(name)) {
 			return &vertexMap.at(name);
 		}
@@ -173,7 +173,7 @@ public:
 		}
 	}
 
-	Edge* getEdge(string name) {
+	Edge* getEdge(string name) { ////check the edge whether is in map or not
 		if (containsEdge(name)) {
 			return &edgeMap.at(name);
 		}
@@ -183,7 +183,7 @@ public:
 		}
 	}
 
-	vector<string> getAdjOutVertex(string v) {
+	vector<string> getAdjOutVertex(string v) {//get outdegree of vertex v
 		map<string, vector<string> >::iterator iter = adjOutList.find(v);
 		vector<string> vertices;
 
@@ -196,7 +196,7 @@ public:
 		return vertices;
 	}
 
-	vector<string> getAdjInVertex(string v) {
+	vector<string> getAdjInVertex(string v) {//get indegree of vertex v
 		map<string, vector<string> >::iterator iter = adjInList.find(v);
 		vector<string> vertices;
 
@@ -208,8 +208,7 @@ public:
 		}
 		return vertices;
 	}
-
-	vector<string>* getRoad(string name) {
+  vector<string>* getRoad(string name) { ////check the road whether is in map or not
 		if (containsRoad(name)) {
 			return &roadMap.at(name);
 		}
@@ -219,7 +218,7 @@ public:
 		}
 	}
 
-	string getV2(string v1, string edge) {
+	string getV2(string v1, string edge) {//get the other vertex of the edge
 		Edge* p = getEdge(edge);
 		if (p->getV1() == v1) {
 			return p->getV2();
@@ -233,7 +232,7 @@ public:
 		}
 	}
 
-	string getEdgeByVertex(string v1, string v2) {
+	string getEdgeByVertex(string v1, string v2) {//get the edge according to the vertexes.
 		map<string, vector<string> >::iterator iter = adjOutList.find(v1);
 		string edge;
 		if (iter != adjOutList.end()) {
@@ -287,15 +286,15 @@ public:
 		edgeMap.insert(make_pair(label, newEdge));
 
 		if (dir == V1_TO_V2) {
-			adjOutList[v1].push_back(label); 
+			adjOutList[v1].push_back(label);
 			adjInList[v2].push_back(label);
 		}
-			
+
 		if (dir == V2_TO_V1) {
 			adjOutList[v2].push_back(label);
 			adjInList[v1].push_back(label);
 		}
-			
+
 		if (dir == BI_DIRECTIONAL)
 		{
 			adjOutList[v1].push_back(label);
@@ -317,7 +316,7 @@ public:
 		e->setEventType(type);
 	}
 
-	bool trip(string fromVertex, string toVertex, string label, tripType type = SHORTEST) {
+	bool trip(string fromVertex, string toVertex, string label, tripType type = SHORTEST) { //if type=shortest find the shortest trip between v1 and v2, if type=fastest find the fastest trip between v1 and v2
 		// declaration
 		priority_queue<Node> queue;
 		map<string, long> priorityMap;
@@ -327,7 +326,7 @@ public:
 		map<string, Vertex>::iterator iterVertex;
 		map<string, long>::iterator iterPriority;
 		map<string, string>::iterator iterPrev;
-		
+
 		//initialize all the vertex priority values
 		for (iterVertex = vertexMap.begin(); iterVertex != vertexMap.end(); iterVertex++) {
 			priorityMap.insert(make_pair(iterVertex->first, LONG_MAX));
@@ -345,7 +344,7 @@ public:
 			Node node = queue.top();
 			string u = node.label;
 			source.push_back(u);
-			
+
 			map<string, vector<string> >::iterator iter = adjOutList.find(u);
 			vector<string> list = iter->second;
 			int num = list.size();
@@ -399,7 +398,7 @@ public:
 			iterPrev = prevMap.find(trace);
 			prev = iterPrev->second;
 		}
-		
+
 		if (trace == fromVertex) {
 			string suffix;
 			if (type == SHORTEST) {
@@ -428,7 +427,7 @@ public:
 		return false;
 	}
 
-	bool containsVertex(string label)
+	bool containsVertex(string label)   //check the map contains the specific vertex?
 	{
 		map<string, Vertex>::iterator it1;
 		it1 = vertexMap.find(label);
@@ -439,7 +438,7 @@ public:
 		return false;
 	}
 
-	bool containsEdge(string label)
+	bool containsEdge(string label)//check the map contains the specific edge?
 	{
 		map<string, Edge>::iterator it1;
 		it1 = edgeMap.find(label);
@@ -450,7 +449,7 @@ public:
 		return false;
 	}
 
-	bool containsRoad(string label) {
+	bool containsRoad(string label) {//check the map contains the specific road?
 		map<string, vector<string> >::iterator it1;
 		it1 = roadMap.find(label);
 		if (it1 != roadMap.end())
@@ -460,7 +459,7 @@ public:
 		return false;
 	}
 
-	void store(string filename) {
+	void store(string filename) {   //output function
 		ofstream outfile;
 		outfile.open(filename.c_str());
 
@@ -498,7 +497,7 @@ public:
 
 	}
 
-	void retrieve(string filename) {
+	void retrieve(string filename) {    //input function
 		ifstream infile;
 		infile.open(filename.c_str());
 
@@ -556,14 +555,14 @@ public:
 
 			infile.getline(buffer, BUFFERSIZE);
 			s = buffer;
-				
+
 		}
 
 		delete buffer;
 
 		infile.close();
 	}
-		
+
 	static int getNumVertex() {
 		return numVertex;
 	}

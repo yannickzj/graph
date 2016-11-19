@@ -187,7 +187,7 @@ public:
 		return vertices;
 	}
 
-  vector<string>* getRoad(string name) { ////check the road whether is in map or not
+	vector<string>* getRoad(string name) { ////check the road whether is in map or not
 		if (containsRoad(name)) {
 			return &roadMap.at(name);
 		}
@@ -274,7 +274,7 @@ public:
 	{
 		if (!containsVertex(v1) || !containsVertex(v2)) {
 			cout << "error: edge vertex does not exist!" << endl;
-			exit(1);
+			return;
 		}
 
 		Edge newEdge(v1, v2, dir, speed, length, type);

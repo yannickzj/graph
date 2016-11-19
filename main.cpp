@@ -6,8 +6,8 @@ using namespace std;
 
 
 int main(int argc, char** argv) {
-
-    Graph m1;
+	
+	Graph m1;
 	m1.retrieve("./test cases/test1.txt");
 	m1.vertex("ccjil");
 	m1.edgeEvent("E1",CLOSE);
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 	m2.trip("CLV", "340", "path1", FASTEST);
 	vector<string> *a = new vector<string> ;
 	m2.road("test_road",*a);
-    m2.store("output2.txt");
+	m2.store("output2.txt");
 
 	return 0;
 }
